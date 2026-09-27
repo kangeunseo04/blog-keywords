@@ -90,6 +90,39 @@ def search_news(q: str, key_id: str, key: str) -> list[dict]:
     return out
 
 
+def search_youtube(q: str, api_key: str, today: date) -> list[dict]:
+    """최근 7일 올라온 영상 중 조회수 순 50개. search.list 100유닛 + videos.list 1유닛 (하루 무료 10,000유닛)."""
+    if not api_key:
+        return []
+    out = []
+    try:
+        since = (today - timedelta(days=7)).isoformat() + "T00:00:00Z"
+        r = requests.get("https://www.googleapis.com/youtube/v3/search", params={
+            "key": api_key, "part": "snippet", "q": q, "type": "video", "order": "viewCount",
+            "publishedAfter": since, "regionCode": "KR", "relevanceLanguage": "ko", "maxResults": 50}, timeout=20)
+        r.raise_for_status()
+        items = r.json().get("items", [])
+        ids = [it["id"]["videoId"] for it in items if it.get("id", {}).get("videoId")]
+        views = {}
+        if ids:
+            r2 = requests.get("https://www.googleapis.com/youtube/v3/videos", params={
+                "key": api_key, "part": "statistics", "id": ",".join(ids)}, timeout=20)
+            r2.raise_for_status()
+            views = {v["id"]: int(v.get("statistics", {}).get("viewCount", 0)) for v in r2.json().get("items", [])}
+        for it in items:
+            vid = it.get("id", {}).get("videoId")
+            sn = it.get("snippet", {})
+            try:
+                d = datetime.strptime(sn.get("publishedAt", "")[:10], "%Y-%m-%d").date()
+            except ValueError:
+                continue
+            out.append({"title": clean_title(sn.get("title", "")), "date": d, "src": "youtube", "q": q,
+                        "link": f"https://youtu.be/{vid}", "views": views.get(vid, 0)})
+    except Exception as e:
+        print(f"[youtube 검색 실패] {q}: {e}", file=sys.stderr)
+    return out
+
+
 class Tokenizer:
     """kiwipiepy가 있으면 명사 판별에 쓰고, 없으면 단순 규칙."""
     def __init__(self):
@@ -138,6 +171,7 @@ def candidates(posts: list[dict], tk: Tokenizer, seed_words: set[str], today: da
     prev = defaultdict(set)
     example = {}
     src_of = defaultdict(set)
+    yt_views = defaultdict(int)
     for i, p in enumerate(posts):
         age = (today - p["date"]).days
         if age < 0 or age > 21:
@@ -160,13 +194,15 @@ def candidates(posts: list[dict], tk: Tokenizer, seed_words: set[str], today: da
             if ph not in example and age <= 7:
                 example[ph] = p
             src_of[ph].add(p["src"])
+            if age <= 7 and p["src"] == "youtube":
+                yt_views[ph] += p.get("views", 0)
     rows = []
     for ph, s in recent.items():
         c7 = len(s)
         if c7 < 3:
             continue
         rows.append({"phrase": ph, "c7": c7, "cprev": len(prev.get(ph, ())),
-                     "example": example.get(ph), "src": src_of[ph]})
+                     "example": example.get(ph), "src": src_of[ph], "yt_views": yt_views.get(ph, 0)})
     # 짧은 구절이 긴 구절에 포함되고 글 수가 비슷하면 긴 쪽만 남김 ("토마토마라탕" < "탕화쿵푸 토마토마라탕")
     rows.sort(key=lambda r: (-r["c7"], -len(r["phrase"])))
     kept = []
@@ -193,7 +229,8 @@ def candidates(posts: list[dict], tk: Tokenizer, seed_words: set[str], today: da
     # 새로 등장(그 전 2주엔 거의 없던 것)일수록 위로
     for r in kept:
         r["newness"] = r["c7"] / (r["cprev"] + 1)
-        r["buzz"] = r["c7"] * (1 + min(3.0, r["newness"])) * (1.5 if "news" in r["src"] else 1.0)
+        yt_bonus = 1 + min(2.0, r["yt_views"] / 200_000)
+        r["buzz"] = r["c7"] * (1 + min(3.0, r["newness"])) * (1.5 if "news" in r["src"] else 1.0) * yt_bonus
     kept.sort(key=lambda r: -r["buzz"])
     return kept
 
@@ -224,7 +261,7 @@ def datalab_momentum(phrases: list[str], key_id: str, key: str, today: date) -> 
     return out
 
 
-def buzz_section(seeds: dict, key_id: str, key: str, today: date, top_n: int = 15) -> str:
+def buzz_section(seeds: dict, key_id: str, key: str, today: date, top_n: int = 15, yt_key: str = "") -> str:
     bq = seeds.get("buzz_queries", {})
     nq = seeds.get("buzz_news_queries", [])
     if not bq and not nq:
@@ -237,6 +274,11 @@ def buzz_section(seeds: dict, key_id: str, key: str, today: date, top_n: int = 1
             posts += search_blog(q, key_id, key, pages=2)
     for q in nq:
         posts += search_news(q, key_id, key)
+    yq = seeds.get("buzz_youtube_queries", [])
+    if yt_key and yq:
+        for q in yq:
+            posts += search_youtube(q, yt_key, today)
+            time.sleep(0.2)
     print(f"[buzz] 수집한 글 {len(posts)}개")
     if not posts:
         return ""
@@ -258,16 +300,22 @@ def buzz_section(seeds: dict, key_id: str, key: str, today: date, top_n: int = 1
         if m >= 1.15: return f"↑ {m:.1f}배"
         return "→ 보합"
 
-    L = ["## 🔥 요즘 뜨는 것 (블로그·뉴스 제목에서 새로 많이 보이는 이름)",
-         "최근 7일 새 글 제목에 자주 나온 브랜드·메뉴·제품. '그 전 2주'가 0에 가까울수록 이번 주에 갑자기 뜬 것. 검색흐름은 데이터랩 최근 3일 ÷ 이전 4주.",
+    def views_txt(n):
+        if n <= 0: return "-"
+        if n >= 1_000_000: return f"{n/1_000_000:.1f}M"
+        if n >= 1_000: return f"{n//1000}K"
+        return str(n)
+
+    L = ["## 🔥 요즘 뜨는 것 (블로그·뉴스·유튜브 제목에서 새로 많이 보이는 이름)",
+         "최근 7일 새 글·영상 제목에 자주 나온 브랜드·메뉴·제품. '그 전 2주'가 0에 가까울수록 이번 주에 갑자기 뜬 것. 검색흐름은 데이터랩 최근 3일 ÷ 이전 4주.",
          "",
-         "| 이름 | 최근 7일 글 | 그 전 2주 | 검색흐름 | 예시 제목 |",
-         "|---|---|---|---|---|"]
+         "| 이름 | 최근 7일 글 | 그 전 2주 | 유튜브 조회수 | 검색흐름 | 예시 |",
+         "|---|---|---|---|---|---|"]
     for r in rows:
         ex = r["example"]
         ex_txt = f"[{ex['title'][:40]}]({ex['link']})" if ex and ex.get("link") else (ex["title"][:40] if ex else "")
-        src = " 📰" if "news" in r["src"] else ""
-        L.append(f"| **{r['phrase']}**{src} | {r['c7']} | {r['cprev']} | {mom_txt(r['mom'])} | {ex_txt} |")
+        src = (" 📰" if "news" in r["src"] else "") + (" ▶️" if "youtube" in r["src"] else "")
+        L.append(f"| **{r['phrase']}**{src} | {r['c7']} | {r['cprev']} | {views_txt(r['yt_views'])} | {mom_txt(r['mom'])} | {ex_txt} |")
     L.append("")
-    L.append("📰 = 뉴스에도 나온 것. 여기 나온 이름은 아직 글이 적을 때 선점하는 용도라, 한 번 검색해 보고 실제 유행인지 확인 후 쓰세요.")
+    L.append("📰 = 뉴스에도 나온 것, ▶️ = 최근 7일 유튜브 영상 제목에도 나온 것(조회수는 그 영상들 합). 여기 나온 이름은 아직 글이 적을 때 선점하는 용도라, 한 번 검색해 보고 실제 유행인지 확인 후 쓰세요.")
     return "\n".join(L)

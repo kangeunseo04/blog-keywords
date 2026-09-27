@@ -23,3 +23,4 @@ Actions 탭 → **내일 키워드 뽑기** → **Run workflow** → 초록 버�
 Settings → Secrets and variables → Actions → **New repository secret**
 - `NAVER_APIHUB_KEY_ID`
 - `NAVER_APIHUB_KEY`
+- `YOUTUBE_API_KEY` (선택 — 있으면 유튜브 신호도 같이 봄)

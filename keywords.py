@@ -393,7 +393,7 @@ def main():
     # 요즘 뜨는 것 (실패해도 본 리포트는 나가야 하므로 감싸둠)
     try:
         from buzz import buzz_section
-        section = buzz_section(seeds, KEY_ID, KEY, datetime.now(KST).date())
+        section = buzz_section(seeds, KEY_ID, KEY, datetime.now(KST).date(), yt_key=os.environ.get("YOUTUBE_API_KEY", ""))
         if section:
             report = report.replace("## 카테고리별 TOP 5", section + "\n\n## 카테고리별 TOP 5", 1)
     except Exception as e:
