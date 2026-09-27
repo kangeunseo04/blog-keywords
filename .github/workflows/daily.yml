@@ -29,6 +29,7 @@ jobs:
         env:
           NAVER_APIHUB_KEY_ID: ${{ secrets.NAVER_APIHUB_KEY_ID }}
           NAVER_APIHUB_KEY: ${{ secrets.NAVER_APIHUB_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: python keywords.py ${{ github.event.inputs.target }}
 
       - name: 리포트 저장 (reports/ 폴더에 누적)
