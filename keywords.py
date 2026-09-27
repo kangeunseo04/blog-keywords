@@ -51,20 +51,20 @@ def calendar_tags(target: date) -> list[tuple[str, str]]:
         if n >= 3:
             tags.append(("연휴끝", f"{n}일 연휴 다음 첫 출근일"))
             if any("추석" in x for x in names):
-                tags.append(("추석", "추석 연휴 직후"))
+                tags.append(("추석후", "추석 연휴 직후 — 명절 음식·살 빼기 검색"))
             if any("설" in x for x in names):
-                tags.append(("설날", "설 연휴 직후"))
+                tags.append(("설날후", "설 연휴 직후 — 명절 음식·살 빼기 검색"))
 
-    # 연휴 직전/중: 3일 안에 추석·설이 있으면
-    for i in range(0, 4):
+    # 연휴 직전/중: 4일 안에 추석·설이 있으면 (선물세트·특선영화 등은 이때만)
+    for i in range(0, 5):
         d = target + timedelta(days=i)
         if d in kr:
             name = kr[d]
-            if "추석" in name and ("추석", "추석 연휴 직후") not in tags:
-                tags.append(("추석", f"{i}일 뒤 {name}"))
+            if "추석" in name:
+                tags.append(("추석전", f"{i}일 뒤 {name} — 선물·연휴 계획 검색"))
                 break
-            if "설" in name and ("설날", "설 연휴 직후") not in tags:
-                tags.append(("설날", f"{i}일 뒤 {name}"))
+            if "설" in name:
+                tags.append(("설날전", f"{i}일 뒤 {name} — 선물·연휴 계획 검색"))
                 break
 
     wd = target.weekday()
@@ -258,13 +258,22 @@ def score_all(sig: dict[str, dict], comp: dict[str, int | None], ctx_kw: set[str
         if v["no_data"]:
             scores[k] = -1
             continue
-        s = 35 * vol_rank[k]
-        s += w_mom * max(-1.0, min(1.0, v["momentum"] - 1))            # 최근 3일 vs 이전 4주
-        s += w_season * max(-1.0, min(1.0, (v["seasonal"] - 1) / 2))   # 작년 같은 위치에서 튀었나
+        # 검색량이 '다이어트'의 10%도 안 되면 상승률은 노이즈 → 상승 점수 축소
+        small = min(1.0, v["rel_volume"] / 0.1)
+        mom_pts = w_mom * max(-1.0, min(1.0, v["momentum"] - 1))              # 최근 3일 vs 이전 4주
+        season_pts = w_season * max(-1.0, min(1.0, (v["seasonal"] - 1) / 2))  # 작년 같은 위치에서 튀었나
+        # 작년 점수는 올해 흐름이 받쳐줄 때만: 최근흐름 0.9배 이하면 0, 1.15배 이상이면 전부 (흑백요리사식 착시 방지)
+        if season_pts > 0:
+            season_pts *= max(0.0, min(1.0, (v["momentum"] - 0.9) / 0.25))
+        if mom_pts > 0: mom_pts *= small
+        if season_pts > 0: season_pts *= small
+        s = 35 * vol_rank[k] + mom_pts + season_pts
         s += 15 * max(-1.0, min(1.0, (v["weekday"] - 1) * 3))          # 이 요일에 강한 키워드인가 (±33%면 만점)
         s += 10 * (1 - comp_rank.get(k, 0.5))                          # 문서 적을수록 유리
         if k in ctx_kw:
             s += 10
+        if v["seasonal"] < 0.6:          # 작년 같은 시점에 확 꺼진 키워드(명절 지난 선물세트 등)는 반토막
+            s *= 0.5
         scores[k] = round(s, 1)
     return scores
 
@@ -298,6 +307,7 @@ def build_report(target: date, tags, seeds, sig, comp, scores, ctx_kw, ly_note: 
     if after_holiday:
         L.append("- ⚠️ 연휴 직후: '최근흐름'은 연휴 전 평일 3일 기준으로 계산(연휴 중 외식·영화 검색 제외), 작년·요일 패턴 비중을 높임")
     L.append("")
+    L.append("점수 규칙: 검색량이 `다이어트`의 10% 미만이면 상승률 점수 축소 · 올해 흐름이 꺾이면 작년 점수 없음 · 작년 같은 시점에 확 꺼진 키워드는 점수 절반.")
     L.append(f"검색량=`다이어트`를 1.0으로 본 배수. 최근흐름=대상일과 같은 종류의 날(평일/쉬는날) 최근 3일 ÷ 이전 4주. 작년={ly_note} ÷ 그 전 4주. {wd}요일=최근 8주 중 {wd}요일 평균 ÷ 전체 평균. 문서수=네이버 블로그 기존 글 수(적을수록 경쟁 낮음).\n")
 
     # 전체 TOP 10
