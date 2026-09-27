@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - run: pip install requests holidays
+      - run: pip install requests holidays kiwipiepy
 
       - name: 키워드 뽑기
         env:
