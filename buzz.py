@@ -148,14 +148,17 @@ def phrase_stats(phrase: str, key_id: str, key: str, today: date) -> dict | None
         except ValueError:
             pass
     if total <= 0 or not dates:
-        return {"total": total, "c7": 0, "share": 0.0}
+        return {"total": total, "c7": 0, "c30": 0, "share": 0.0}
     c7_seen = sum(1 for d in dates if (today - d).days <= 7)
+    c30_seen = sum(1 for d in dates if (today - d).days <= 30)
     if len(dates) < 100:
-        c7 = c7_seen                                   # 전부 봤음
+        c7, c30 = c7_seen, c30_seen                    # 전부 봤음
     else:
         span = max(1, (today - min(dates)).days)      # 최신 100개가 며칠치인지
-        c7 = int(round(min(total, 100 / span * 7))) if span < 7 else c7_seen
-    return {"total": total, "c7": c7, "share": min(1.0, c7 / total)}
+        rate = 100 / span                              # 하루 글 수
+        c7 = int(round(min(total, rate * 7))) if span < 7 else c7_seen
+        c30 = int(round(min(total, rate * 30))) if span < 30 else c30_seen
+    return {"total": total, "c7": c7, "c30": c30, "share": min(1.0, c7 / total)}
 
 
 class Tokenizer:
@@ -302,11 +305,11 @@ def datalab_momentum(phrases: list[str], key_id: str, key: str, today: date) -> 
     return out
 
 
-def buzz_section(seeds: dict, key_id: str, key: str, today: date, top_n: int = 15, yt_key: str = "") -> str:
+def buzz_rows(seeds: dict, key_id: str, key: str, today: date, top_n: int = 15, yt_key: str = "") -> list[dict]:
     bq = seeds.get("buzz_queries", {})
     nq = seeds.get("buzz_news_queries", [])
     if not bq and not nq:
-        return ""
+        return []
     tk = Tokenizer()
     seed_words = {k for kws in seeds.get("categories", {}).values() for k in kws}
     posts = []
@@ -322,7 +325,7 @@ def buzz_section(seeds: dict, key_id: str, key: str, today: date, top_n: int = 1
             time.sleep(0.2)
     print(f"[buzz] 수집한 글 {len(posts)}개")
     if not posts:
-        return ""
+        return []
     rows = candidates(posts, tk, seed_words, today)[:60]
     # 구절별로 전체 글 수 vs 최근 7일 새 글 수를 따로 세서 '늘 있는 말'을 거름
     verified = []
@@ -346,20 +349,33 @@ def buzz_section(seeds: dict, key_id: str, key: str, today: date, top_n: int = 1
         r["final"] = math.log1p(r["c7"]) * (r["share"] ** 0.5) * (1 + min(3.0, max(0.0, m - 1))) * (1.0 if m > 0 else 0.6) * yt_bonus * news_bonus
     rows.sort(key=lambda r: -r["final"])
     rows = rows[:top_n]
+    # JSON으로 내보낼 수 있게 정리
+    for r in rows:
+        ex = r.get("example") or {}
+        r["example_title"] = ex.get("title", "")
+        r["example_link"] = ex.get("link", "")
+        r["src"] = sorted(r["src"])
+        r.pop("example", None)
+    return rows
+
+
+def mom_txt(m):
+    if m == 0: return "검색 거의 없음"
+    if m >= 1.5: return f"↑↑ {m:.1f}배"
+    if m >= 1.15: return f"↑ {m:.1f}배"
+    return "→ 보합"
+
+
+def views_txt(n):
+    if n <= 0: return "-"
+    if n >= 1_000_000: return f"{n/1_000_000:.1f}M"
+    if n >= 1_000: return f"{n//1000}K"
+    return str(n)
+
+
+def buzz_markdown(rows: list[dict]) -> str:
     if not rows:
         return ""
-
-    def mom_txt(m):
-        if m == 0: return "검색 거의 없음"
-        if m >= 1.5: return f"↑↑ {m:.1f}배"
-        if m >= 1.15: return f"↑ {m:.1f}배"
-        return "→ 보합"
-
-    def views_txt(n):
-        if n <= 0: return "-"
-        if n >= 1_000_000: return f"{n/1_000_000:.1f}M"
-        if n >= 1_000: return f"{n//1000}K"
-        return str(n)
 
     L = ["## 🔥 요즘 뜨는 것 (블로그·뉴스·유튜브 제목에서 새로 많이 보이는 이름)",
          "최근 7일 새 글·영상 제목에 자주 나온 브랜드·메뉴·제품. **새 글 비율**=이 이름으로 된 블로그 글 전체 중 이번 주에 쓰인 비율 — 100%에 가까울수록 완전히 새로 나온 것. 검색흐름은 데이터랩 최근 3일 ÷ 이전 4주.",
@@ -367,8 +383,7 @@ def buzz_section(seeds: dict, key_id: str, key: str, today: date, top_n: int = 1
          "| 이름 | 최근 7일 새 글 | 전체 글 | 새 글 비율 | 유튜브 조회수 | 검색흐름 | 예시 |",
          "|---|---|---|---|---|---|---|"]
     for r in rows:
-        ex = r["example"]
-        ex_txt = f"[{ex['title'][:40]}]({ex['link']})" if ex and ex.get("link") else (ex["title"][:40] if ex else "")
+        ex_txt = f"[{r['example_title'][:40]}]({r['example_link']})" if r.get("example_link") else r.get("example_title", "")[:40]
         src = (" 📰" if "news" in r["src"] else "") + (" ▶️" if "youtube" in r["src"] else "")
         L.append(f"| **{r['phrase']}**{src} | {r['c7']:,} | {r['total']:,} | {r['share']*100:.0f}% | {views_txt(r['yt_views'])} | {mom_txt(r['mom'])} | {ex_txt} |")
     L.append("")

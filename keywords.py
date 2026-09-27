@@ -234,6 +234,7 @@ def fetch_all(keywords: list[str], anchor: str, target: date, ly_ref: date) -> d
         for k in chunk:
             s = series_signals(results.get(k, []), target, ly_ref)
             s["rel_volume"] = s["level"] / a_level  # 앵커(예: '다이어트')=1.0 기준
+            s["series"] = [[d["period"][5:], float(d["ratio"])] for d in results.get(k, [])[-60:]]  # 대시보드 스파크라인용
             out[k] = s
         time.sleep(0.3)
     return out
@@ -246,39 +247,50 @@ def pct_rank(values: dict[str, float]) -> dict[str, float]:
     return {k: (i / (n - 1) if n > 1 else 0.5) for i, (k, _) in enumerate(items)}
 
 
-def score_all(sig: dict[str, dict], comp: dict[str, int | None], ctx_kw: set[str],
-              after_holiday: bool) -> dict[str, float]:
-    vol_rank = pct_rank({k: math.log1p(v["rel_volume"] * 100) for k, v in sig.items()})
+def score_all(sig, comp, ctx_kw, after_holiday, recent7=None, vols=None, sat=None) -> dict[str, float]:
+    """vols: 검색광고 월 검색량(있으면 검색량 기준으로 씀), sat: 포화도(월 발행량÷월 검색량)"""
+    vols = vols or {}
+    sat = sat or {}
+    if vols:
+        vol_rank = pct_rank({k: math.log1p(vols.get(k, {}).get("total", 0) or (v["rel_volume"] * 1000)) for k, v in sig.items()})
+    else:
+        vol_rank = pct_rank({k: math.log1p(v["rel_volume"] * 100) for k, v in sig.items()})
     comp_vals = {k: math.log1p(c) for k, c in comp.items() if c is not None}
-    comp_rank = pct_rank(comp_vals) if comp_vals else {}
-    # 연휴 직후엔 '최근 흐름'이 연휴 행동(외식·영화)을 반영하므로 비중을 낮추고 작년·요일 비중을 올림
+    total_rank = pct_rank(comp_vals) if comp_vals else {}
+    r7_vals = {k: math.log1p(c) for k, c in (recent7 or {}).items() if c is not None}
+    r7_rank = pct_rank(r7_vals) if r7_vals else {}
+    sat_vals = {k: v for k, v in sat.items() if v is not None}
+    sat_rank = pct_rank(sat_vals) if sat_vals else {}
+    # 경쟁도: 포화도(검색 대비 발행)가 있으면 그걸 절반, 나머지는 전체 글·최근 7일 글
+    comp_rank = {}
+    for k in sig:
+        base = 0.5 * total_rank.get(k, 0.5) + 0.5 * r7_rank.get(k, total_rank.get(k, 0.5))
+        comp_rank[k] = 0.5 * base + 0.5 * sat_rank[k] if k in sat_rank else base
     w_mom, w_season = (10, 30) if after_holiday else (20, 20)
     scores = {}
     for k, v in sig.items():
         if v["no_data"]:
             scores[k] = -1
             continue
-        # 검색량이 '다이어트'의 10%도 안 되면 상승률은 노이즈 → 상승 점수 축소
         small = min(1.0, v["rel_volume"] / 0.1)
-        mom_pts = w_mom * max(-1.0, min(1.0, v["momentum"] - 1))              # 최근 3일 vs 이전 4주
-        season_pts = w_season * max(-1.0, min(1.0, (v["seasonal"] - 1) / 2))  # 작년 같은 위치에서 튀었나
-        # 작년 점수는 올해 흐름이 받쳐줄 때만: 최근흐름 0.9배 이하면 0, 1.15배 이상이면 전부 (흑백요리사식 착시 방지)
+        mom_pts = w_mom * max(-1.0, min(1.0, v["momentum"] - 1))
+        season_pts = w_season * max(-1.0, min(1.0, (v["seasonal"] - 1) / 2))
         if season_pts > 0:
             season_pts *= max(0.0, min(1.0, (v["momentum"] - 0.9) / 0.25))
         if mom_pts > 0: mom_pts *= small
         if season_pts > 0: season_pts *= small
-        s = 35 * vol_rank[k] + mom_pts + season_pts
-        s += 15 * max(-1.0, min(1.0, (v["weekday"] - 1) * 3))          # 이 요일에 강한 키워드인가 (±33%면 만점)
-        s += 10 * (1 - comp_rank.get(k, 0.5))                          # 문서 적을수록 유리
+        sc = 35 * vol_rank[k] + mom_pts + season_pts
+        sc += 15 * max(-1.0, min(1.0, (v["weekday"] - 1) * 3))
+        sc += 15 * (1 - comp_rank.get(k, 0.5))
         if k in ctx_kw:
-            s += 10
-        if v["seasonal"] < 0.6:          # 작년 같은 시점에 확 꺼진 키워드(명절 지난 선물세트 등)는 반토막
-            s *= 0.5
-        scores[k] = round(s, 1)
+            sc += 10
+        if v["seasonal"] < 0.6:
+            sc *= 0.5
+        scores[k] = round(sc, 1)
     return scores
 
 
-# ---------- 리포트 ----------
+# ---------- 표시 ----------
 def arrow(x: float) -> str:
     if x >= 1.5: return f"↑↑ {x:.1f}배"
     if x >= 1.15: return f"↑ {x:.1f}배"
@@ -295,73 +307,68 @@ def fmt_int(n):
     return f"{n:,}" if isinstance(n, int) else "-"
 
 
-def build_report(target: date, tags, seeds, sig, comp, scores, ctx_kw, ly_note: str, after_holiday: bool) -> str:
-    L = []
+def fmt_sat(row):
+    if row.get("saturation") is None:
+        return "-"
+    return f"{row['saturation']*100:.0f}% ({row['grade']})"
+
+
+def row_line(r, wd, with_rank=None):
+    vol = fmt_int(r["monthly_search"]) if r.get("monthly_search") is not None else f"×{r['rel_volume']:.2f}"
+    cells = [f"**{r['keyword']}**" + (" 🗓" if r["is_context"] else ""), r["category"], vol,
+             arrow(r["momentum"]), arrow(r["seasonal"]), pct(r["weekday"]),
+             fmt_int(r.get("monthly_posts")), fmt_sat(r), fmt_int(r.get("recent7")), str(r["score"])]
+    if with_rank is not None:
+        cells.insert(0, str(with_rank))
+    return "| " + " | ".join(cells) + " |"
+
+
+def build_report(data: dict) -> str:
+    target = date.fromisoformat(data["target"])
     wd = WEEKDAY_KO[target.weekday()]
-    now = datetime.now(KST).strftime("%m/%d %H:%M")
-    L.append(f"# {target.isoformat()} ({wd}) 키워드 추천 — {now} 실행\n")
-    L.append("## 오늘의 달력 신호")
-    for t, why in tags:
-        L.append(f"- **{t}** — {why}")
-    L.append(f"- 작년 비교 기준: {ly_note}")
-    if after_holiday:
+    has_vol = data["meta"]["has_monthly_search"]
+    L = [f"# {data['target']} ({wd}) 키워드 추천 — {data['generated_at']} 실행\n", "## 오늘의 달력 신호"]
+    for t in data["tags"]:
+        L.append(f"- **{t['tag']}** — {t['why']}")
+    L.append(f"- 작년 비교 기준: {data['ly_note']}")
+    if data["after_holiday"]:
         L.append("- ⚠️ 연휴 직후: '최근흐름'은 연휴 전 평일 3일 기준으로 계산(연휴 중 외식·영화 검색 제외), 작년·요일 패턴 비중을 높임")
     L.append("")
     L.append("점수 규칙: 검색량이 `다이어트`의 10% 미만이면 상승률 점수 축소 · 올해 흐름이 꺾이면 작년 점수 없음 · 작년 같은 시점에 확 꺼진 키워드는 점수 절반.")
-    L.append(f"검색량=`다이어트`를 1.0으로 본 배수. 최근흐름=대상일과 같은 종류의 날(평일/쉬는날) 최근 3일 ÷ 이전 4주. 작년={ly_note} ÷ 그 전 4주. {wd}요일=최근 8주 중 {wd}요일 평균 ÷ 전체 평균. 문서수=네이버 블로그 기존 글 수(적을수록 경쟁 낮음).\n")
+    vol_note = "월 검색량=네이버 검색광고 기준 PC+모바일 월간 검색수." if has_vol else "검색량=`다이어트`를 1.0으로 본 배수(검색광고 키를 넣으면 실제 월 검색량으로 바뀜)."
+    L.append(f"{vol_note} 최근흐름=대상일과 같은 종류의 날(평일/쉬는날) 최근 3일 ÷ 이전 4주. 작년={data['ly_note']} ÷ 그 전 4주. {wd}요일=최근 8주 중 {wd}요일 평균 ÷ 전체 평균. 월 발행량=최근 30일 새 블로그 글 수(추정). 포화도=월 발행량 ÷ 월 검색량(낮을수록 노출 기회 큼).\n")
 
-    # 전체 TOP 10
-    ranked = sorted([k for k in scores if scores[k] >= 0], key=lambda k: -scores[k])
-    cat_of = {}
-    for c, kws in seeds["categories"].items():
-        for k in kws:
-            cat_of.setdefault(k, c)
-    for k in ctx_kw:
-        cat_of.setdefault(k, "달력 키워드")
-
-    L.append("## 👉 내일 쓸 만한 키워드 TOP 10")
-    L.append(f"| 순위 | 키워드 | 분류 | 검색량 | 최근흐름 | 작년 | {wd}요일 | 문서수 | 점수 |")
-    L.append("|---|---|---|---|---|---|---|---|---|")
-    for i, k in enumerate(ranked[:10], 1):
-        v = sig[k]
-        mark = " 🗓" if k in ctx_kw else ""
-        L.append(f"| {i} | **{k}**{mark} | {cat_of.get(k,'')} | {v['rel_volume']:.2f} | {arrow(v['momentum'])} | {arrow(v['seasonal'])} | {pct(v['weekday'])} | {fmt_int(comp.get(k))} | {scores[k]} |")
+    hdr = f"| 순위 | 키워드 | 분류 | {'월 검색량' if has_vol else '검색량'} | 최근흐름 | 작년 | {wd}요일 | 월 발행량 | 포화도 | 최근 7일 글 | 점수 |"
+    sep = "|" + "---|" * 11
+    L += ["## 👉 내일 쓸 만한 키워드 TOP 10", hdr, sep]
+    for i, r in enumerate(data["top10"], 1):
+        L.append(row_line(r, wd, i))
     L.append("")
-
-    # 오늘의 2편 제안: 서로 다른 분류에서 1, 2위
-    picks, seen = [], set()
-    for k in ranked:
-        c = cat_of.get(k, "")
-        if c not in seen:
-            picks.append(k); seen.add(c)
-        if len(picks) == 2:
-            break
-    if picks:
+    if data["picks"]:
         L.append("## ✍️ 오늘 2편 제안")
-        for k in picks:
-            L.append(f"- **{k}** ({cat_of.get(k,'')})")
+        for r in data["picks"]:
+            L.append(f"- **{r['keyword']}** ({r['category']})")
+            rel = r.get("related") or []
+            if rel:
+                L.append("  - 연관 키워드: " + ", ".join(f"{x['keyword']}({x['total']:,})" for x in rel[:8]))
         L.append("")
-
-    # 카테고리별
+    if data["buzz"]:
+        from buzz import buzz_markdown
+        L.append(buzz_markdown(data["buzz"]))
+        L.append("")
     L.append("## 카테고리별 TOP 5")
-    groups = dict(seeds["categories"])
-    groups["달력 키워드"] = sorted(ctx_kw)
-    for c, kws in groups.items():
-        rows = sorted([k for k in kws if k in scores and scores[k] >= 0], key=lambda k: -scores[k])[:5]
+    hdr2 = hdr.replace("| 순위 ", "")
+    sep2 = "|" + "---|" * 10
+    for cat, rows in data["by_category"].items():
         if not rows:
             continue
-        L.append(f"### {c}")
-        L.append(f"| 키워드 | 검색량 | 최근흐름 | 작년 | {wd}요일 | 문서수 | 점수 |")
-        L.append("|---|---|---|---|---|---|---|")
-        for k in rows:
-            v = sig[k]
-            L.append(f"| {k} | {v['rel_volume']:.2f} | {arrow(v['momentum'])} | {arrow(v['seasonal'])} | {pct(v['weekday'])} | {fmt_int(comp.get(k))} | {scores[k]} |")
+        L += [f"### {cat}", hdr2, sep2]
+        for r in rows:
+            L.append(row_line(r, wd))
         L.append("")
-
-    nodata = [k for k in scores if scores[k] < 0]
-    if nodata:
+    if data["no_data"]:
         L.append("<details><summary>검색량이 거의 없어 제외한 키워드</summary>\n")
-        L.append(", ".join(nodata))
+        L.append(", ".join(data["no_data"]))
         L.append("\n</details>")
     return "\n".join(L)
 
@@ -396,24 +403,106 @@ def main():
     sig = fetch_all(keywords, seeds["anchor"], target, ly_ref)
     if not sig:
         sys.exit("데이터랩 응답이 없습니다. API 키와 Application의 검색어트렌드 권한을 확인하세요.")
-    comp = {k: blog_count(k) for k in sig}
-    after_holiday = post_holiday(target, datetime.now(KST).date())
-    scores = score_all(sig, comp, ctx_kw, after_holiday)
-    report = build_report(target, tags, seeds, sig, comp, scores, ctx_kw, ly_note, after_holiday)
 
-    # 요즘 뜨는 것 (실패해도 본 리포트는 나가야 하므로 감싸둠)
+    # 블로그 글 수: 전체 / 최근 7일 / 최근 30일(월 발행량)
+    from buzz import phrase_stats, buzz_rows
+    import searchad
+    today = datetime.now(KST).date()
+    comp, recent7, monthly_posts = {}, {}, {}
+    for k in sig:
+        st = phrase_stats(k, KEY_ID, KEY, today)
+        comp[k] = st["total"] if st else None
+        recent7[k] = st["c7"] if st else None
+        monthly_posts[k] = st["c30"] if st else None
+        time.sleep(0.1)
+
+    # 검색광고: 월 검색량(절대값) — 키 있을 때만
+    vols = searchad.monthly_volumes(list(sig)) if searchad.enabled() else {}
+    if searchad.enabled():
+        print(f"[검색광고] 월 검색량 {len(vols)}/{len(sig)}개")
+    sat = {}
+    for k in sig:
+        s_val, _ = searchad.saturation(monthly_posts.get(k), vols.get(k, {}).get("total"))
+        sat[k] = s_val
+
+    after_holiday = post_holiday(target, today)
+    scores = score_all(sig, comp, ctx_kw, after_holiday, recent7, vols, sat)
+
+    cat_of = {}
+    for c, kws in seeds["categories"].items():
+        for k in kws:
+            cat_of.setdefault(k, c)
+    for k in ctx_kw:
+        cat_of.setdefault(k, "달력 키워드")
+
+    rows = {}
+    for k, v in sig.items():
+        s_val, grade = searchad.saturation(monthly_posts.get(k), vols.get(k, {}).get("total"))
+        rows[k] = {
+            "keyword": k, "category": cat_of.get(k, ""), "is_context": k in ctx_kw,
+            "score": scores[k], "rel_volume": round(v["rel_volume"], 3),
+            "monthly_search": vols.get(k, {}).get("total"), "monthly_search_pc": vols.get(k, {}).get("pc"),
+            "monthly_search_mo": vols.get(k, {}).get("mo"), "ad_comp": vols.get(k, {}).get("comp", ""),
+            "momentum": round(v["momentum"], 2), "seasonal": round(v["seasonal"], 2), "weekday": round(v["weekday"], 3),
+            "total_posts": comp.get(k), "recent7": recent7.get(k), "monthly_posts": monthly_posts.get(k),
+            "saturation": (round(s_val, 3) if s_val is not None else None), "grade": grade,
+            "series": v.get("series", []),
+        }
+    ranked = sorted([k for k in rows if rows[k]["score"] >= 0], key=lambda k: -rows[k]["score"])
+    top10 = [rows[k] for k in ranked[:10]]
+    picks, seen_cat = [], set()
+    for k in ranked:
+        c = rows[k]["category"]
+        if c not in seen_cat:
+            picks.append(rows[k]); seen_cat.add(c)
+        if len(picks) == 2:
+            break
+    # 제안 2편 + TOP 5에 연관 키워드 (검색광고 키 있을 때)
+    if searchad.enabled():
+        for r in picks + top10[:5]:
+            if "related" not in r:
+                r["related"] = searchad.related(r["keyword"], set(sig))
+                time.sleep(0.2)
+
+    groups = dict(seeds["categories"])
+    groups["달력 키워드"] = sorted(ctx_kw)
+    by_category = {}
+    for c, kws in groups.items():
+        by_category[c] = sorted([rows[k] for k in kws if k in rows and rows[k]["score"] >= 0], key=lambda r: -r["score"])[:5]
+
+    # 요즘 뜨는 것
+    buzz = []
     try:
-        from buzz import buzz_section
-        section = buzz_section(seeds, KEY_ID, KEY, datetime.now(KST).date(), yt_key=os.environ.get("YOUTUBE_API_KEY", ""))
-        if section:
-            report = report.replace("## 카테고리별 TOP 5", section + "\n\n## 카테고리별 TOP 5", 1)
+        buzz = buzz_rows(seeds, KEY_ID, KEY, today, yt_key=os.environ.get("YOUTUBE_API_KEY", ""))
     except Exception as e:
         print(f"[buzz 실패] {e}", file=sys.stderr)
+
+    data = {
+        "target": target.isoformat(), "weekday": WEEKDAY_KO[target.weekday()],
+        "generated_at": datetime.now(KST).strftime("%m/%d %H:%M"),
+        "tags": [{"tag": t, "why": w} for t, w in tags], "ly_note": ly_note, "after_holiday": after_holiday,
+        "meta": {"anchor": seeds["anchor"], "has_monthly_search": bool(vols), "keyword_count": len(sig)},
+        "top10": top10, "picks": picks, "by_category": by_category, "buzz": buzz,
+        "no_data": [k for k in rows if rows[k]["score"] < 0],
+        "all": [rows[k] for k in ranked],
+    }
+    report = build_report(data)
 
     os.makedirs("reports", exist_ok=True)
     path = f"reports/{target.isoformat()}.md"
     with open(path, "w", encoding="utf-8") as f:
         f.write(report)
+    slim = dict(data)
+    slim["all"] = [{kk: vv for kk, vv in r.items() if kk != "series"} for r in data["all"]]
+    for key in ("top10", "picks"):
+        pass  # top10/picks는 series 포함 (스파크라인)
+    with open("reports/latest.json", "w", encoding="utf-8") as f:
+        json.dump(slim, f, ensure_ascii=False)
+    with open(f"reports/{target.isoformat()}.json", "w", encoding="utf-8") as f:
+        json.dump(slim, f, ensure_ascii=False)
+    dates = sorted({fn[:-5] for fn in os.listdir("reports") if fn.endswith(".json") and fn[0].isdigit()}, reverse=True)
+    with open("reports/index.json", "w", encoding="utf-8") as f:   # 대시보드 날짜 목록
+        json.dump(dates, f)
     with open(".last_report", "w", encoding="utf-8") as f:   # 워크플로가 이 파일을 이슈로 올림
         f.write(path)
     print(report)
