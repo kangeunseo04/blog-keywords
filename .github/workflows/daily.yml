@@ -44,7 +44,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          FILE=$(ls reports/*.md | tail -1)
+          FILE=$(cat .last_report)
           TITLE="$(head -1 "$FILE" | sed 's/^# //')"
           gh issue create --title "$TITLE" --body-file "$FILE" --label keywords || \
           gh issue create --title "$TITLE" --body-file "$FILE"
