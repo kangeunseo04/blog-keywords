@@ -1,0 +1,49 @@
+name: 내일 키워드 뽑기
+
+on:
+  schedule:
+    - cron: "0 9 * * *"   # 매일 18:00 KST (UTC 09:00)
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "기준 날짜 (예: 2026-10-01). 비우면 내일"
+        required: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install requests holidays
+
+      - name: 키워드 뽑기
+        env:
+          NAVER_APIHUB_KEY_ID: ${{ secrets.NAVER_APIHUB_KEY_ID }}
+          NAVER_APIHUB_KEY: ${{ secrets.NAVER_APIHUB_KEY }}
+        run: python keywords.py ${{ github.event.inputs.target }}
+
+      - name: 리포트 저장 (reports/ 폴더에 누적)
+        run: |
+          git config user.name "keyword-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add reports/
+          git diff --cached --quiet || git commit -m "report: $(ls reports | tail -1)"
+          git push
+
+      - name: 이슈로 알림
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          FILE=$(ls reports/*.md | tail -1)
+          TITLE="$(head -1 "$FILE" | sed 's/^# //')"
+          gh issue create --title "$TITLE" --body-file "$FILE" --label keywords || \
+          gh issue create --title "$TITLE" --body-file "$FILE"
