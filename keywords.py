@@ -289,7 +289,8 @@ def fmt_int(n):
 def build_report(target: date, tags, seeds, sig, comp, scores, ctx_kw, ly_note: str, after_holiday: bool) -> str:
     L = []
     wd = WEEKDAY_KO[target.weekday()]
-    L.append(f"# {target.isoformat()} ({wd}) 키워드 추천\n")
+    now = datetime.now(KST).strftime("%m/%d %H:%M")
+    L.append(f"# {target.isoformat()} ({wd}) 키워드 추천 — {now} 실행\n")
     L.append("## 오늘의 달력 신호")
     for t, why in tags:
         L.append(f"- **{t}** — {why}")
@@ -403,6 +404,8 @@ def main():
     path = f"reports/{target.isoformat()}.md"
     with open(path, "w", encoding="utf-8") as f:
         f.write(report)
+    with open(".last_report", "w", encoding="utf-8") as f:   # 워크플로가 이 파일을 이슈로 올림
+        f.write(path)
     print(report)
     print(f"\n저장: {path}")
 

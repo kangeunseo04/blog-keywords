@@ -5,6 +5,7 @@
 - 인스타·숏츠에서 유행하는 건 며칠 안에 블로그 제목에 그대로 찍히므로 그걸 역추적하는 방식.
 """
 import html
+import math
 import re
 import sys
 import time
@@ -28,6 +29,11 @@ STOP = set("""
 그리고 그래서 하지만 진짜 정말 완전 너무 엄청 살짝 조금 약간 그냥 역시 드디어 결국 다시 또 계속 아직 이제
 하는 하기 하고 했다 했어요 해요 합니다 있는 없는 있어요 없어요 되는 되기 먹는 먹기 먹고 먹은 마시는 가는 가기 갔다 가서 가면
 이번 지난 다음 이달 매일 매주 매달 하루 이틀 한달 일주일 첫 두번째 세번째 신규 오픈 재오픈 리뉴얼
+봄 여름 가을 겨울 환절기 추석 설날 설 명절 연휴 크리스마스 새해 할로윈 발렌타인 빼빼로데이 수능 주말 공휴일
+이거 저거 그거 이건 저건 그건 여기 저기 거기 이런 저런 그런 뭐 왜 어디 언제 누구 어떻게 얼마나
+디저트 케이크 빵 커피 라떼 음료 아이스 핫 치킨 피자 버거 김밥 라면 과자 아이스크림 빙수 케익 쿠키 마카롱 베이글 크로플
+저당 제로 무설탕 저칼로리 고단백 단백질 비건 글루텐프리 유기농 국산 수제
+할인 특가 최저가 역대급 가성비 혜자 득템 품절 재입고 대란 인기 화제 논란 근황 소식 공개 발표 예고 오픈런 필독 필수 주의 총정리 모음 리스트
 """.split())
 
 TOKEN_SPLIT = re.compile(r"[\s\[\]()（）/,!?~·|:;\"'“”‘’…\-–—+=*#&%<>{}]+")
@@ -123,6 +129,35 @@ def search_youtube(q: str, api_key: str, today: date) -> list[dict]:
     return out
 
 
+def phrase_stats(phrase: str, key_id: str, key: str, today: date) -> dict | None:
+    """네이버 블로그에서 이 구절로 검색: 전체 글 수 + 최신 100개 날짜 → 최근 7일 새 글(추정)과 새 글 비율.
+    콰삭모짜킹(새 메뉴)은 전체 글 대부분이 이번 주 글, '가을'·'디저트'는 0.1%도 안 됨 → 뻔한 말을 거르는 기준."""
+    try:
+        r = requests.get(f"{BASE}/search/v1/blog", headers=_headers(key_id, key),
+                         params={"query": phrase, "display": 100, "sort": "date"}, timeout=15)
+        r.raise_for_status()
+        j = r.json()
+    except Exception as e:
+        print(f"[phrase_stats 실패] {phrase}: {e}", file=sys.stderr)
+        return None
+    total = int(j.get("total", 0))
+    dates = []
+    for it in j.get("items", []):
+        try:
+            dates.append(datetime.strptime(it.get("postdate", ""), "%Y%m%d").date())
+        except ValueError:
+            pass
+    if total <= 0 or not dates:
+        return {"total": total, "c7": 0, "share": 0.0}
+    c7_seen = sum(1 for d in dates if (today - d).days <= 7)
+    if len(dates) < 100:
+        c7 = c7_seen                                   # 전부 봤음
+    else:
+        span = max(1, (today - min(dates)).days)      # 최신 100개가 며칠치인지
+        c7 = int(round(min(total, 100 / span * 7))) if span < 7 else c7_seen
+    return {"total": total, "c7": c7, "share": min(1.0, c7 / total)}
+
+
 class Tokenizer:
     """kiwipiepy가 있으면 명사 판별에 쓰고, 없으면 단순 규칙."""
     def __init__(self):
@@ -203,8 +238,20 @@ def candidates(posts: list[dict], tk: Tokenizer, seed_words: set[str], today: da
             continue
         rows.append({"phrase": ph, "c7": c7, "cprev": len(prev.get(ph, ())),
                      "example": example.get(ph), "src": src_of[ph], "yt_views": yt_views.get(ph, 0)})
+    kept = rows
+    # 새로 등장(그 전 2주엔 거의 없던 것)일수록 위로
+    for r in kept:
+        r["newness"] = r["c7"] / (r["cprev"] + 1)
+        yt_bonus = 1 + min(2.0, r["yt_views"] / 200_000)
+        r["buzz"] = r["c7"] * (1 + min(3.0, r["newness"])) * (1.5 if "news" in r["src"] else 1.0) * yt_bonus
+    kept.sort(key=lambda r: -r["buzz"])
+    return kept
+
+
+def dedupe(rows: list[dict]) -> list[dict]:
+    """검증 뒤 겹치는 구절 정리"""
     # 짧은 구절이 긴 구절에 포함되고 글 수가 비슷하면 긴 쪽만 남김 ("토마토마라탕" < "탕화쿵푸 토마토마라탕")
-    rows.sort(key=lambda r: (-r["c7"], -len(r["phrase"])))
+    rows = sorted(rows, key=lambda r: (-r["c7"], -len(r["phrase"])))
     kept = []
     for r in rows:
         dominated = False
@@ -226,12 +273,6 @@ def candidates(posts: list[dict], tk: Tokenizer, seed_words: set[str], today: da
             continue
         merged.append(r)
     kept = merged
-    # 새로 등장(그 전 2주엔 거의 없던 것)일수록 위로
-    for r in kept:
-        r["newness"] = r["c7"] / (r["cprev"] + 1)
-        yt_bonus = 1 + min(2.0, r["yt_views"] / 200_000)
-        r["buzz"] = r["c7"] * (1 + min(3.0, r["newness"])) * (1.5 if "news" in r["src"] else 1.0) * yt_bonus
-    kept.sort(key=lambda r: -r["buzz"])
     return kept
 
 
@@ -282,13 +323,27 @@ def buzz_section(seeds: dict, key_id: str, key: str, today: date, top_n: int = 1
     print(f"[buzz] 수집한 글 {len(posts)}개")
     if not posts:
         return ""
-    rows = candidates(posts, tk, seed_words, today)[:40]
+    rows = candidates(posts, tk, seed_words, today)[:60]
+    # 구절별로 전체 글 수 vs 최근 7일 새 글 수를 따로 세서 '늘 있는 말'을 거름
+    verified = []
+    for r in rows:
+        st = phrase_stats(r["phrase"], key_id, key, today)
+        time.sleep(0.1)
+        if not st or st["total"] < 3:
+            continue
+        r.update(st)
+        if st["share"] < 0.03:          # 전체 글 중 이번 주 글이 3% 미만 = 원래 흔한 말
+            continue
+        verified.append(r)
+    rows = dedupe(verified)
     mom = datalab_momentum([r["phrase"] for r in rows], key_id, key, today)
     for r in rows:
         m = mom.get(r["phrase"], 0.0)
         r["mom"] = m
-        # 검색이 실제로 붙는 것(데이터랩에 값이 있음)에 가산
-        r["final"] = r["buzz"] * (1 + min(3.0, max(0.0, m - 1))) * (1.0 if m > 0 else 0.4)
+        yt_bonus = 1 + min(2.0, r["yt_views"] / 200_000)
+        news_bonus = 1.3 if "news" in r["src"] else 1.0
+        # 새 글 수(양) × 새 글 비율(신선도) × 검색 붙는 정도 × 유튜브 × 뉴스
+        r["final"] = math.log1p(r["c7"]) * (r["share"] ** 0.5) * (1 + min(3.0, max(0.0, m - 1))) * (1.0 if m > 0 else 0.6) * yt_bonus * news_bonus
     rows.sort(key=lambda r: -r["final"])
     rows = rows[:top_n]
     if not rows:
@@ -307,15 +362,15 @@ def buzz_section(seeds: dict, key_id: str, key: str, today: date, top_n: int = 1
         return str(n)
 
     L = ["## 🔥 요즘 뜨는 것 (블로그·뉴스·유튜브 제목에서 새로 많이 보이는 이름)",
-         "최근 7일 새 글·영상 제목에 자주 나온 브랜드·메뉴·제품. '그 전 2주'가 0에 가까울수록 이번 주에 갑자기 뜬 것. 검색흐름은 데이터랩 최근 3일 ÷ 이전 4주.",
+         "최근 7일 새 글·영상 제목에 자주 나온 브랜드·메뉴·제품. **새 글 비율**=이 이름으로 된 블로그 글 전체 중 이번 주에 쓰인 비율 — 100%에 가까울수록 완전히 새로 나온 것. 검색흐름은 데이터랩 최근 3일 ÷ 이전 4주.",
          "",
-         "| 이름 | 최근 7일 글 | 그 전 2주 | 유튜브 조회수 | 검색흐름 | 예시 |",
-         "|---|---|---|---|---|---|"]
+         "| 이름 | 최근 7일 새 글 | 전체 글 | 새 글 비율 | 유튜브 조회수 | 검색흐름 | 예시 |",
+         "|---|---|---|---|---|---|---|"]
     for r in rows:
         ex = r["example"]
         ex_txt = f"[{ex['title'][:40]}]({ex['link']})" if ex and ex.get("link") else (ex["title"][:40] if ex else "")
         src = (" 📰" if "news" in r["src"] else "") + (" ▶️" if "youtube" in r["src"] else "")
-        L.append(f"| **{r['phrase']}**{src} | {r['c7']} | {r['cprev']} | {views_txt(r['yt_views'])} | {mom_txt(r['mom'])} | {ex_txt} |")
+        L.append(f"| **{r['phrase']}**{src} | {r['c7']:,} | {r['total']:,} | {r['share']*100:.0f}% | {views_txt(r['yt_views'])} | {mom_txt(r['mom'])} | {ex_txt} |")
     L.append("")
     L.append("📰 = 뉴스에도 나온 것, ▶️ = 최근 7일 유튜브 영상 제목에도 나온 것(조회수는 그 영상들 합). 여기 나온 이름은 아직 글이 적을 때 선점하는 용도라, 한 번 검색해 보고 실제 유행인지 확인 후 쓰세요.")
     return "\n".join(L)
