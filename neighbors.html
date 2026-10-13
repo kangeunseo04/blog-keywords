@@ -37,14 +37,14 @@ function save(d, v){ try { localStorage.setItem(key(d), JSON.stringify(v)); } ca
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 fetch("neighbors/latest.json?" + Date.now()).then(r => r.json()).then(data => {
   const done = load(data.date);
-  document.getElementById("sub").textContent = data.date + " · " + data.items.length + "곳 · " + data.criteria;
+  document.getElementById("sub").textContent = data.date + " · " + data.items.length + "곳 · " + data.criteria + (data.note ? " · " + data.note : "");
   const list = document.getElementById("list");
   if (!data.items.length) { list.innerHTML = '<p class="empty">오늘은 새로 추천할 블로그가 없었어요.</p>'; return; }
   data.items.forEach(it => {
     const el = document.createElement("div");
     el.className = "card" + (done[it.id] ? " done" : "");
     const posts = it.latest.map(p => '<p class="post">' + esc(p.date.slice(5)) + ' · <a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.title) + '</a></p>').join("");
-    el.innerHTML = '<p class="name">' + esc(it.name) + '</p><p class="meta">' + esc(it.cats.join(", ")) + ' · 최근 7일 글 ' + it.recent_posts + '개</p>' + posts +
+    el.innerHTML = '<p class="name">' + esc(it.name) + '</p><p class="meta">' + esc(it.cats.join(", ")) + '</p><p class="meta">' + esc(it.why || "") + '</p>' + posts +
       '<div class="row"><a class="btn" href="' + esc(it.url) + '" target="_blank" rel="noopener">블로그 열기</a><label><input type="checkbox"' + (done[it.id] ? " checked" : "") + '> 신청했어요</label></div>';
     el.querySelector("input").addEventListener("change", e => {
       done[it.id] = e.target.checked; save(data.date, done);
