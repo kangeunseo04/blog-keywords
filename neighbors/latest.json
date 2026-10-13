@@ -1,350 +1,59 @@
 {
  "date": "2026-10-13",
- "generatedAt": "2026-10-13T17:15:16+09:00",
- "criteria": "최근 7일 안에 글이 검색된 네이버 블로그 · 이미 추천한 블로그 제외",
+ "generatedAt": "2026-10-13T17:24:13+09:00",
+ "criteria": "최근 30일 안에 후기 말투 글이 검색 상위에 노출된 블로그 · 정보형 제목 위주·이미 추천한 곳 제외",
+ "note": "방문자 수·댓글 열림 여부는 알 수 없어요. 열어서 직접 확인해 주세요.",
  "queried": [
-  "다이어트 정보: 다이어트 정체기",
-  "다이어트 정보: 위고비",
-  "다이어트 정보: 마운자로",
-  "다이어트 식단: 곤약 요리",
-  "다이어트 식단: 샐러드 레시피",
-  "다이어트 식단: 그릭요거트",
-  "카페: 스타벅스 프리퀀시",
-  "카페: 투썸 신메뉴",
-  "카페: 메가커피 신메뉴",
-  "맛집: 국밥 맛집",
-  "맛집: 데이트 맛집",
-  "맛집: 가성비 맛집",
-  "제품 리뷰: 공기청정기",
-  "제품 리뷰: 다이어트 차",
-  "제품 리뷰: 프로틴바",
-  "컨텐츠 리뷰: 영화 개봉",
-  "컨텐츠 리뷰: 드라마 추천",
-  "컨텐츠 리뷰: 예능 추천"
+  "다이어트 식단: 곤약 요리 내돈내산 후기",
+  "다이어트 식단: 샐러드 레시피 내돈내산 후기",
+  "다이어트 식단: 그릭요거트 내돈내산 후기",
+  "카페: 스타벅스 프리퀀시 다녀왔어요",
+  "카페: 투썸 신메뉴 다녀왔어요",
+  "카페: 메가커피 신메뉴 다녀왔어요",
+  "맛집: 국밥 맛집 다녀왔어요",
+  "맛집: 데이트 맛집 다녀왔어요",
+  "맛집: 가성비 맛집 다녀왔어요",
+  "제품 리뷰: 공기청정기 내돈내산 후기",
+  "제품 리뷰: 다이어트 차 내돈내산 후기",
+  "제품 리뷰: 프로틴바 내돈내산 후기",
+  "컨텐츠 리뷰: 영화 개봉 후기",
+  "컨텐츠 리뷰: 드라마 추천 후기",
+  "컨텐츠 리뷰: 예능 추천 후기"
  ],
  "failedQueries": 0,
- "pool": 1533,
+ "pool": 4,
  "items": [
   {
-   "id": "mobile114-",
-   "name": "모바일114",
-   "url": "https://blog.naver.com/mobile114-",
+   "id": "yo_lo-",
+   "name": "황Yolo의 세계",
+   "url": "https://blog.naver.com/yo_lo-",
    "cats": [
-    "맛집"
-   ],
-   "recent_posts": 6,
-   "latest": [
-    {
-     "title": "[전북] 정원콩나물국밥",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/mobile114-/224440002592"
-    },
-    {
-     "title": "[전남광주] 순천만가마솥국밥",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/mobile114-/224439956226"
-    }
-   ]
-  },
-  {
-   "id": "xxxing1",
-   "name": "별이 빛난다",
-   "url": "https://blog.naver.com/xxxing1",
-   "cats": [
-    "다이어트 식단",
-    "다이어트 정보"
-   ],
-   "recent_posts": 5,
-   "latest": [
-    {
-     "title": "수면 다이어트 원리 정체기 다이어터를 위한 기초대사량 증진 가이....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/xxxing1/224440358775"
-    },
-    {
-     "title": "다이어트 정체기 극복 폭식형 치팅과 리피드 식단 차이",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/xxxing1/224440350676"
-    }
-   ]
-  },
-  {
-   "id": "jalpalgom",
-   "name": "jalpalgom님의 블로그",
-   "url": "https://blog.naver.com/jalpalgom",
-   "cats": [
-    "다이어트 정보"
-   ],
-   "recent_posts": 5,
-   "latest": [
-    {
-     "title": "99대89 대반전! 현대모비스가 우승 후보 DB를 잡은 진짜 이유",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/jalpalgom/224440225575"
-    },
-    {
-     "title": "엑스디너리 히어로즈, 결국 돌아왔다…미니 9집 'IMPULSE' 공개",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/jalpalgom/224440223127"
-    }
-   ]
-  },
-  {
-   "id": "yja815714",
-   "name": "yja815714님의 블로그",
-   "url": "https://blog.naver.com/yja815714",
-   "cats": [
-    "다이어트 정보"
-   ],
-   "recent_posts": 4,
-   "latest": [
-    {
-     "title": "난치성 피부 각화 질환인 건선의 발병 기전과 체질 맞춤형 한방 치....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/yja815714/224440327276"
-    },
-    {
-     "title": "현대인 비만 유형별 한의학적 심층 진단과 표적 감량에 대한 학술적....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/yja815714/224440294413"
-    }
-   ]
-  },
-  {
-   "id": "h-vero",
-   "name": "리움 여행&건강 노트",
-   "url": "https://blog.naver.com/h-vero",
-   "cats": [
-    "다이어트 식단",
-    "카페",
-    "컨텐츠 리뷰"
-   ],
-   "recent_posts": 3,
-   "latest": [
-    {
-     "title": "\"본방 놓쳤다고 울지 마세요\".. 놀라운 토요일 재방송 채널별 시간표....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/h-vero/224440381680"
-    },
-    {
-     "title": "\"밥 두 공기 비웠어요\".. 5분 만에 뚝딱 만드는 연어깍두기레시피 비....",
-     "date": "2026-10-12",
-     "url": "https://blog.naver.com/h-vero/224439585816"
-    }
-   ]
-  },
-  {
-   "id": "issugee79",
-   "name": "온에어픽",
-   "url": "https://blog.naver.com/issugee79",
-   "cats": [
-    "컨텐츠 리뷰"
-   ],
-   "recent_posts": 4,
-   "latest": [
-    {
-     "title": "중드 10년 본 덕후도 점유율 40%에 놀란 그 40부작, 장해전 주말 이틀 ....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/issugee79/224440033955"
-    },
-    {
-     "title": "중드 150편 본 덕후도 원작 배신에 놀란 그 36부작, 도화영강산 주말 ....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/issugee79/224440084947"
-    }
-   ]
-  },
-  {
-   "id": "mai_bb",
-   "name": "잡다한 것들",
-   "url": "https://blog.naver.com/mai_bb",
-   "cats": [
-    "컨텐츠 리뷰"
-   ],
-   "recent_posts": 4,
-   "latest": [
-    {
-     "title": "영화 <베스트 엑조틱 메리골드 호텔 2> (2015) 줄거리 / 결말 / 정보 / ....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/mai_bb/224440404666"
-    },
-    {
-     "title": "영화 <블랙 스완> (Black Swan, 2010) 줄거리 / 결말 / 정보 / 비하인드 스....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/mai_bb/224440392677"
-    }
-   ]
-  },
-  {
-   "id": "dearbyday",
-   "name": "Dear, by Day",
-   "url": "https://blog.naver.com/dearbyday",
-   "cats": [
-    "다이어트 식단",
-    "다이어트 정보"
-   ],
-   "recent_posts": 3,
-   "latest": [
-    {
-     "title": "후쿠오카 마운자로 성지 어디? 2026 병원 위치·가격·한국에서 미리 ....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/dearbyday/224440417858"
-    },
-    {
-     "title": "[돈키호테 쇼핑 3탄] 캐리어 터져도 쟁여야 할 돈키호테 마약 간식 & ....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/dearbyday/224440307940"
-    }
-   ]
-  },
-  {
-   "id": "bombamstory",
-   "name": "어쩌다 마주친 이야기",
-   "url": "https://blog.naver.com/bombamstory",
-   "cats": [
-    "카페",
-    "컨텐츠 리뷰"
-   ],
-   "recent_posts": 3,
-   "latest": [
-    {
-     "title": "빽다방 호지차라떼 가격 및 맛 솔직한 후기와 추천 커스텀",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/bombamstory/224440159160"
-    },
-    {
-     "title": "암살자들 영화 관객수와 실화 배경 줄거리 해석",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/bombamstory/224440403326"
-    }
-   ]
-  },
-  {
-   "id": "5004yurim",
-   "name": "유림여사 제4의 활동",
-   "url": "https://blog.naver.com/5004yurim",
-   "cats": [
-    "다이어트 식단",
-    "다이어트 정보",
-    "맛집",
     "제품 리뷰"
    ],
-   "recent_posts": 2,
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-01",
    "latest": [
     {
-     "title": "박지윤 공복걷기 다이어트, 아침 공복에 걸으면 정말 살이 더 빠질....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/5004yurim/224439378386"
-    },
-    {
-     "title": "생생정보 대중교통 타고 즐기는 경남 하동 여행 화개장터 옥화주막 ....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/5004yurim/224440387540"
+     "title": "청담 실리프팅 효과 처진뱃살 고민으로 2차 진행한 복부 실리프팅 ....",
+     "date": "2026-10-01",
+     "url": "https://blog.naver.com/yo_lo-/224428091516"
     }
    ]
   },
   {
-   "id": "koera_849",
-   "name": "my blog is mess",
-   "url": "https://blog.naver.com/koera_849",
+   "id": "greenery829",
+   "name": "눕지마 일어나",
+   "url": "https://blog.naver.com/greenery829",
    "cats": [
-    "다이어트 정보"
+    "카페"
    ],
-   "recent_posts": 3,
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 0회 · 후기 말투 글 1개 · 최근 글 09-18",
    "latest": [
     {
-     "title": "에페 vs 위고비 vs 마운자로, 3대 비만약 차이점 5가지 완벽 정리",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/koera_849/224440350819"
-    },
-    {
-     "title": "국산 비만약 '에페'에 맞불? 위고비 건강보험 급여 추진과 예상 약가",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/koera_849/224440342590"
-    }
-   ]
-  },
-  {
-   "id": "news_oneday",
-   "name": "영화 드라마의 모든것",
-   "url": "https://blog.naver.com/news_oneday",
-   "cats": [
-    "컨텐츠 리뷰"
-   ],
-   "recent_posts": 3,
-   "latest": [
-    {
-     "title": "선수 은퇴했는데 더 잘나간다… ‘신인감독 김연경2’ 첫방부터 1위....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/news_oneday/224440427335"
-    },
-    {
-     "title": "병원 드라마 지겹다면서 또 1위… 우리는 왜 ‘천재 의사’ 드라마....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/news_oneday/224440409136"
-    }
-   ]
-  },
-  {
-   "id": "qkrwlsn102109",
-   "name": "오늘의 연예 노트",
-   "url": "https://blog.naver.com/qkrwlsn102109",
-   "cats": [
-    "다이어트 정보"
-   ],
-   "recent_posts": 3,
-   "latest": [
-    {
-     "title": "1989년생 유퀴즈 도슨트 정우철, 결혼 접고 YTN 앵커 엄지민과 부부 된....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/qkrwlsn102109/224440306605"
-    },
-    {
-     "title": "“이렇게까지 이해해 준다고?” 16기 상철 만취…결혼 2일 차 영숙이....",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/qkrwlsn102109/224440300194"
-    }
-   ]
-  },
-  {
-   "id": "foxandhunter",
-   "name": "육아와 쀼의 세계",
-   "url": "https://blog.naver.com/foxandhunter",
-   "cats": [
-    "컨텐츠 리뷰"
-   ],
-   "recent_posts": 3,
-   "latest": [
-    {
-     "title": "여배우의 거침 없는 카페 \"모유 수유\"",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/foxandhunter/224440415603"
-    },
-    {
-     "title": "8년전 북한 돌아간 \"탈북연예인\" 중국 갔다 납치 의혹",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/foxandhunter/224440355087"
-    }
-   ]
-  },
-  {
-   "id": "cnsgid1009",
-   "name": "이것저것 기록용",
-   "url": "https://blog.naver.com/cnsgid1009",
-   "cats": [
-    "다이어트 정보"
-   ],
-   "recent_posts": 3,
-   "latest": [
-    {
-     "title": "10/12(월)-마운자로 5일차, 배가 고프기 시작",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/cnsgid1009/224440365993"
-    },
-    {
-     "title": "10/11(일)-마운자로 4일차, 등이랑 어께가 아픈데??",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/cnsgid1009/224440364037"
+     "title": "파주 헤이리마을 근처 메가커피, 하우스밀크 라떼 신메뉴 먹어본 후....",
+     "date": "2026-09-18",
+     "url": "https://blog.naver.com/greenery829/224416309432"
     }
    ]
   }
