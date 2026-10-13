@@ -1,0 +1,46 @@
+name: 서이추 후보 뽑기
+
+on:
+  schedule:
+    - cron: "0 22 * * *"   # 매일 07:00 KST (UTC 22:00)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install requests
+
+      - name: 서이추 후보 뽑기
+        env:
+          NAVER_APIHUB_KEY_ID: ${{ secrets.NAVER_APIHUB_KEY_ID }}
+          NAVER_APIHUB_KEY: ${{ secrets.NAVER_APIHUB_KEY }}
+        run: python neighbors.py
+
+      - name: 결과 저장 (neighbors/ 폴더에 누적)
+        run: |
+          git config user.name "keyword-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add neighbors/
+          git diff --cached --quiet || git commit -m "neighbors: $(cat .last_neighbors)"
+          git pull --rebase origin main
+          git push
+
+      - name: 이슈로 알림
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          FILE=$(cat .last_neighbors)
+          TITLE="$(head -1 "$FILE" | sed 's/^# //')"
+          gh issue create --title "$TITLE" --body-file "$FILE" --label neighbors || \
+          gh issue create --title "$TITLE" --body-file "$FILE"
