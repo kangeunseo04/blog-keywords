@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>서이추 후보</title>
+<style>
+:root{color-scheme:light;--bg:#F5F7F3;--surface:#fff;--ink:#17231D;--muted:#66756C;--line:#D9E1DA;--accent:#1E7A4B;--accent-soft:#E3F2E8}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#10160F;--surface:#182018;--ink:#E8EFE8;--muted:#91A094;--line:#2A352C;--accent:#5BC98C;--accent-soft:#1D3326}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "IBM Plex Sans KR",system-ui,sans-serif}
+main{max-width:640px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.25rem;margin:0 0 4px}
+.sub{color:var(--muted);font-size:.875rem;margin:0 0 16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.card.done{opacity:.5}
+.name{font-weight:600;margin:0}
+.meta{color:var(--muted);font-size:.8125rem;margin:2px 0 8px}
+.post{font-size:.875rem;margin:2px 0}
+.post a{color:var(--ink)}
+.row{display:flex;gap:8px;align-items:center;margin-top:10px}
+.btn{display:inline-block;padding:8px 14px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;font-size:.875rem}
+label{font-size:.875rem;color:var(--muted);display:flex;gap:6px;align-items:center;cursor:pointer}
+.empty{color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+<h1>서이추 후보</h1>
+<p class="sub" id="sub">불러오는 중…</p>
+<div id="list"></div>
+</main>
+<script>
+const key = d => "neighbors-done-" + d;
+function load(d){ try { return JSON.parse(localStorage.getItem(key(d)) || "{}"); } catch(e){ return {}; } }
+function save(d, v){ try { localStorage.setItem(key(d), JSON.stringify(v)); } catch(e){} }
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+fetch("neighbors/latest.json?" + Date.now()).then(r => r.json()).then(data => {
+  const done = load(data.date);
+  document.getElementById("sub").textContent = data.date + " · " + data.items.length + "곳 · " + data.criteria;
+  const list = document.getElementById("list");
+  if (!data.items.length) { list.innerHTML = '<p class="empty">오늘은 새로 추천할 블로그가 없었어요.</p>'; return; }
+  data.items.forEach(it => {
+    const el = document.createElement("div");
+    el.className = "card" + (done[it.id] ? " done" : "");
+    const posts = it.latest.map(p => '<p class="post">' + esc(p.date.slice(5)) + ' · <a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.title) + '</a></p>').join("");
+    el.innerHTML = '<p class="name">' + esc(it.name) + '</p><p class="meta">' + esc(it.cats.join(", ")) + ' · 최근 7일 글 ' + it.recent_posts + '개</p>' + posts +
+      '<div class="row"><a class="btn" href="' + esc(it.url) + '" target="_blank" rel="noopener">블로그 열기</a><label><input type="checkbox"' + (done[it.id] ? " checked" : "") + '> 신청했어요</label></div>';
+    el.querySelector("input").addEventListener("change", e => {
+      done[it.id] = e.target.checked; save(data.date, done);
+      el.classList.toggle("done", e.target.checked);
+    });
+    list.appendChild(el);
+  });
+}).catch(() => { document.getElementById("sub").textContent = "아직 결과가 없어요. Actions에서 한 번 실행해 주세요."; });
+</script>
+</body>
+</html>
