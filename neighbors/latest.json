@@ -1,234 +1,229 @@
 {
- "date": "2026-10-24",
- "generatedAt": "2026-10-24T09:26:17+09:00",
+ "date": "2026-10-25",
+ "generatedAt": "2026-10-25T09:10:20+09:00",
  "criteria": "최근 30일 안에 후기 말투 글이 검색 상위에 노출된 블로그 · 정보형 제목 위주·이미 추천한 곳 제외",
  "note": "방문자 수·댓글 열림 여부는 알 수 없어요. 열어서 직접 확인해 주세요.",
  "queried": [
-  "다이어트 식단: 다이어트 김밥 내돈내산 후기",
-  "다이어트 식단: 고구마 다이어트 내돈내산 후기",
-  "다이어트 식단: 다이어트 한끼 내돈내산 후기",
-  "카페: 컴포즈 신메뉴 다녀왔어요",
-  "카페: 카페 데이트 다녀왔어요",
-  "카페: 소금빵 맛집 다녀왔어요",
-  "맛집: 혼밥 맛집 다녀왔어요",
-  "맛집: 냉면 맛집 다녀왔어요",
-  "맛집: 돈까스 맛집 다녀왔어요",
-  "제품 리뷰: 로봇청소기 내돈내산 후기",
-  "제품 리뷰: 다이소 신상 내돈내산 후기",
-  "제품 리뷰: 올리브영 세일 내돈내산 후기",
-  "컨텐츠 리뷰: 웹툰 추천 후기",
-  "컨텐츠 리뷰: 흑백요리사 후기",
-  "컨텐츠 리뷰: 넷플릭스 드라마 후기"
+  "다이어트 식단: 저속노화 식단 내돈내산 후기",
+  "다이어트 식단: 단백질 식단 내돈내산 후기",
+  "다이어트 식단: 다이어트 저녁 내돈내산 후기",
+  "카페: 카페 투어 다녀왔어요",
+  "카페: 이디야 신메뉴 다녀왔어요",
+  "카페: 빽다방 신메뉴 다녀왔어요",
+  "맛집: 쌀국수 맛집 다녀왔어요",
+  "맛집: 곱창 맛집 다녀왔어요",
+  "맛집: 한식 뷔페 다녀왔어요",
+  "제품 리뷰: 제로 과자 내돈내산 후기",
+  "제품 리뷰: 닭가슴살 추천 내돈내산 후기",
+  "제품 리뷰: 블렌더 추천 내돈내산 후기",
+  "컨텐츠 리뷰: 이번주 개봉 영화 후기",
+  "컨텐츠 리뷰: OTT 신작 후기",
+  "컨텐츠 리뷰: 애니 추천 후기"
  ],
  "failedQueries": 0,
- "pool": 384,
+ "pool": 375,
  "items": [
   {
-   "id": "merry_d_nail",
-   "name": "Merry_D",
-   "url": "https://blog.naver.com/merry_d_nail",
+   "id": "ppjjss1123",
+   "name": "#Yoom의 일상스토리",
+   "url": "https://blog.naver.com/ppjjss1123",
    "cats": [
-    "맛집"
-   ],
-   "recent_posts": 2,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 2개 · 최근 글 10-19",
-   "latest": [
-    {
-     "title": "양주 맛집 돈까스 히마와리 옥정 본점 엄마와 다녀온 꼬치우동 돈까....",
-     "date": "2026-10-19",
-     "url": "https://blog.naver.com/merry_d_nail/224446795184"
-    },
-    {
-     "title": "광적 갈비맛집 양주 광적이대감 백석맛집 참숯 왕갈비 솔직후기 (주....",
-     "date": "2026-10-15",
-     "url": "https://blog.naver.com/merry_d_nail/224442758513"
-    }
-   ]
-  },
-  {
-   "id": "msh6327",
-   "name": "자전거,러닝 운동하는 초록아빠 블로그",
-   "url": "https://blog.naver.com/msh6327",
-   "cats": [
-    "맛집"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 2회 · 후기 말투 글 1개 · 최근 글 10-17",
-   "latest": [
-    {
-     "title": "강서구 가성비 맛집 혜자냉면&돈까스, 겨울 신메뉴 혜자우동 아이랑....",
-     "date": "2026-10-17",
-     "url": "https://blog.naver.com/msh6327/224442704046"
-    }
-   ]
-  },
-  {
-   "id": "sweeetbelle",
-   "name": "하나둘 우리가 예뻐지는 공간",
-   "url": "https://blog.naver.com/sweeetbelle",
-   "cats": [
-    "맛집"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 2회 · 후기 말투 글 1개 · 최근 글 10-15",
-   "latest": [
-    {
-     "title": "향남 돈까스 맛집 도이제 온가족이 좋아하는 돈카츠 먹으러 다녀왔....",
-     "date": "2026-10-15",
-     "url": "https://blog.naver.com/sweeetbelle/224443094099"
-    }
-   ]
-  },
-  {
-   "id": "asnrb05",
-   "name": "M9의 방구석 아카이브",
-   "url": "https://blog.naver.com/asnrb05",
-   "cats": [
-    "다이어트 식단"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-23",
-   "latest": [
-    {
-     "title": "[단백질 음료] 단백질 24g 때려 박은 '남양 테이크핏 맥스' 내돈내산 ....",
-     "date": "2026-10-23",
-     "url": "https://blog.naver.com/asnrb05/224451299592"
-    }
-   ]
-  },
-  {
-   "id": "trendidi",
-   "name": "My Little...",
-   "url": "https://blog.naver.com/trendidi",
-   "cats": [
-    "제품 리뷰"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-17",
-   "latest": [
-    {
-     "title": "LG 로니 로봇청소기 스탠드형 내돈내산 후기, 직접 써보니 좋았던 점....",
-     "date": "2026-10-17",
-     "url": "https://blog.naver.com/trendidi/224444805073"
-    }
-   ]
-  },
-  {
-   "id": "r_lisa",
-   "name": "R_LISA",
-   "url": "https://blog.naver.com/r_lisa",
-   "cats": [
-    "맛집"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-22",
-   "latest": [
-    {
-     "title": "속초 냉면맛집 단천면옥 내돈내산 후기, 단천냉면 메뉴추천",
-     "date": "2026-10-22",
-     "url": "https://blog.naver.com/r_lisa/224450339967"
-    }
-   ]
-  },
-  {
-   "id": "1st_soso",
-   "name": "Sosolog",
-   "url": "https://blog.naver.com/1st_soso",
-   "cats": [
-    "컨텐츠 리뷰"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-16",
-   "latest": [
-    {
-     "title": "중랑역 '한국횟집' 오마카세 솔직후기 | 2인 예약 방법 가격, 성시경 ....",
-     "date": "2026-10-16",
-     "url": "https://blog.naver.com/1st_soso/224443624001"
-    }
-   ]
-  },
-  {
-   "id": "korlawyer17",
-   "name": "korlawyer17님의블로그",
-   "url": "https://blog.naver.com/korlawyer17",
-   "cats": [
-    "제품 리뷰"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-21",
-   "latest": [
-    {
-     "title": "내돈내산 로봇청소기 3개월 실사용 솔직 후기: 삶의 질을 높여주는 ....",
-     "date": "2026-10-21",
-     "url": "https://blog.naver.com/korlawyer17/224446777769"
-    }
-   ]
-  },
-  {
-   "id": "love_gaeun1349",
-   "name": "silver._.97_",
-   "url": "https://blog.naver.com/love_gaeun1349",
-   "cats": [
-    "컨텐츠 리뷰"
+    "카페"
    ],
    "recent_posts": 1,
    "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-18",
    "latest": [
     {
-     "title": "[합정동 찐맛집]오스테리아 샘킴 식당 흑백요리사 솔직후기",
+     "title": "빽다방 신메뉴 호지차라떼 메뉴판 가격 칼로리 덜달게 내돈내산",
      "date": "2026-10-18",
-     "url": "https://blog.naver.com/love_gaeun1349/224445495542"
+     "url": "https://blog.naver.com/ppjjss1123/224445613561"
     }
    ]
   },
   {
-   "id": "yeonhanamme",
-   "name": "yeonhanamme",
-   "url": "https://blog.naver.com/yeonhanamme",
+   "id": "ndole",
+   "name": "N돌이의 이모저모",
+   "url": "https://blog.naver.com/ndole",
    "cats": [
-    "맛집"
+    "제품 리뷰"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-19",
+   "latest": [
+    {
+     "title": "닌자 블렌더 프로페셔널 2.0 BR201KR 내돈내산 후기｜분쇄력은 만족! ....",
+     "date": "2026-10-19",
+     "url": "https://blog.naver.com/ndole/224446174248"
+    }
+   ]
+  },
+  {
+   "id": "happy_with_liz",
+   "name": "Yolo!",
+   "url": "https://blog.naver.com/happy_with_liz",
+   "cats": [
+    "컨텐츠 리뷰"
    ],
    "recent_posts": 1,
    "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-14",
    "latest": [
     {
-     "title": "검단신도시 아라동 맛집 온정돈까스 아이랑 다녀온 후기",
+     "title": "대형견 내돈내산 리드줄 추천｜파운드마이애니몰 2년 실사용 후기....",
      "date": "2026-10-14",
-     "url": "https://blog.naver.com/yeonhanamme/224440451833"
+     "url": "https://blog.naver.com/happy_with_liz/224441795523"
     }
    ]
   },
   {
-   "id": "pov_712",
-   "name": "ᴴᴬᴺᴵ ᴮᴸᴼᴳ ᩚ",
-   "url": "https://blog.naver.com/pov_712",
+   "id": "petitberry7124",
+   "name": "petitberry7124님의 블로그",
+   "url": "https://blog.naver.com/petitberry7124",
+   "cats": [
+    "다이어트 식단"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-19",
+   "latest": [
+    {
+     "title": "임신 준비하며 다시 챙긴 올리블 올리브3 내돈내산 후기｜지중해 식....",
+     "date": "2026-10-19",
+     "url": "https://blog.naver.com/petitberry7124/224446931141"
+    }
+   ]
+  },
+  {
+   "id": "ting2141",
+   "name": "whatever",
+   "url": "https://blog.naver.com/ting2141",
    "cats": [
     "카페"
    ],
    "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-13",
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-20",
    "latest": [
     {
-     "title": "강원도 영월소금빵 맛집 평일에 다녀온 후기",
-     "date": "2026-10-13",
-     "url": "https://blog.naver.com/pov_712/224440528834"
+     "title": "전주 금성당 스토어 주차 카페 시계방 투어 다녀온 후기 (음료 메뉴 ....",
+     "date": "2026-10-20",
+     "url": "https://blog.naver.com/ting2141/224448074394"
     }
    ]
   },
   {
-   "id": "diem_lady",
-   "name": "꾹뽀의 일상이야기❤️",
-   "url": "https://blog.naver.com/diem_lady",
+   "id": "314203",
+   "name": "ᴴᵞᵁᴺ ᴵᴿᴵˢ",
+   "url": "https://blog.naver.com/314203",
+   "cats": [
+    "맛집"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-19",
+   "latest": [
+    {
+     "title": "울산성안동맛집 울산한식뷔페 “단골맛집” 다녀왔어요",
+     "date": "2026-10-19",
+     "url": "https://blog.naver.com/314203/224446234862"
+    }
+   ]
+  },
+  {
+   "id": "min0205kr",
+   "name": "♥먹집이의 블로그 ♥️",
+   "url": "https://blog.naver.com/min0205kr",
+   "cats": [
+    "맛집"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-16",
+   "latest": [
+    {
+     "title": "대전 웨이팅 맛집 베트남 쌀국수 다녀온 후기 기록",
+     "date": "2026-10-16",
+     "url": "https://blog.naver.com/min0205kr/224444089374"
+    }
+   ]
+  },
+  {
+   "id": "addfam",
+   "name": "✔️ADD✔️",
+   "url": "https://blog.naver.com/addfam",
+   "cats": [
+    "맛집"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-23",
+   "latest": [
+    {
+     "title": "파주 한식 맛집 선테이블 엄마랑 다녀온 동패동 한식뷔페 가성비 좋....",
+     "date": "2026-10-23",
+     "url": "https://blog.naver.com/addfam/224451235650"
+    }
+   ]
+  },
+  {
+   "id": "kclasum144",
+   "name": "냠냠온달로그",
+   "url": "https://blog.naver.com/kclasum144",
    "cats": [
     "카페"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-20",
+   "latest": [
+    {
+     "title": "담양 카페 슬담｜비 오는 날 다녀온 내돈내산 솔직 후기",
+     "date": "2026-10-20",
+     "url": "https://blog.naver.com/kclasum144/224448084617"
+    }
+   ]
+  },
+  {
+   "id": "dododoran",
+   "name": "도란도란 사는 이야기",
+   "url": "https://blog.naver.com/dododoran",
+   "cats": [
+    "카페"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-19",
+   "latest": [
+    {
+     "title": "빽다방 가을 신메뉴  <호지차라떼>먹어본 후기",
+     "date": "2026-10-19",
+     "url": "https://blog.naver.com/dododoran/224446735522"
+    }
+   ]
+  },
+  {
+   "id": "eyefgx1smn",
+   "name": "돈은 없고 취향은 많아",
+   "url": "https://blog.naver.com/eyefgx1smn",
+   "cats": [
+    "다이어트 식단"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 09-28",
+   "latest": [
+    {
+     "title": "저속노화 습관으로 챙긴 올리블 올리브3 올리브오일 캡슐 내돈내산 ....",
+     "date": "2026-09-28",
+     "url": "https://blog.naver.com/eyefgx1smn/224425038510"
+    }
+   ]
+  },
+  {
+   "id": "sindh1234",
+   "name": "맛따라 길따라",
+   "url": "https://blog.naver.com/sindh1234",
+   "cats": [
+    "맛집"
    ],
    "recent_posts": 1,
    "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-22",
    "latest": [
     {
-     "title": "컴포즈커피 신메뉴 라떼 4종 솔직후기 및 칼로리 영양소",
+     "title": "구월동 맛집 쏘곱, 아들이랑 남편과 다녀온 가성비 소곱창 맛집",
      "date": "2026-10-22",
-     "url": "https://blog.naver.com/diem_lady/224449874942"
+     "url": "https://blog.naver.com/sindh1234/224450548876"
     }
    ]
   }
