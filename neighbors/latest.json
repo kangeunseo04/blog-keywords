@@ -1,235 +1,234 @@
 {
- "date": "2026-11-19",
- "generatedAt": "2026-11-19T12:06:13+09:00",
+ "date": "2026-11-20",
+ "generatedAt": "2026-11-20T11:56:30+09:00",
  "criteria": "최근 30일 안에 후기 말투 글이 검색 상위에 노출된 블로그 · 정보형 제목 위주·이미 추천한 곳 제외",
  "note": "방문자 수·댓글 열림 여부는 알 수 없어요. 열어서 직접 확인해 주세요.",
  "queried": [
-  "다이어트 식단: 저속노화 식단 내돈내산 후기",
-  "다이어트 식단: 단백질 식단 내돈내산 후기",
-  "다이어트 식단: 다이어트 저녁 내돈내산 후기",
-  "카페: 카페 투어 다녀왔어요",
-  "카페: 이디야 신메뉴 다녀왔어요",
-  "카페: 빽다방 신메뉴 다녀왔어요",
-  "맛집: 쌀국수 맛집 다녀왔어요",
-  "맛집: 곱창 맛집 다녀왔어요",
-  "맛집: 한식 뷔페 다녀왔어요",
-  "제품 리뷰: 제로 과자 내돈내산 후기",
-  "제품 리뷰: 닭가슴살 추천 내돈내산 후기",
-  "제품 리뷰: 블렌더 추천 내돈내산 후기",
-  "컨텐츠 리뷰: 이번주 개봉 영화 후기",
-  "컨텐츠 리뷰: OTT 신작 후기",
-  "컨텐츠 리뷰: 애니 추천 후기"
+  "다이어트 식단: 다이어트 식단 내돈내산 후기",
+  "다이어트 식단: 닭가슴살 요리 내돈내산 후기",
+  "다이어트 식단: 다이어트 도시락 내돈내산 후기",
+  "카페: 카페 신메뉴 다녀왔어요",
+  "카페: 스타벅스 신메뉴 다녀왔어요",
+  "카페: 디저트 카페 다녀왔어요",
+  "맛집: 마라탕 다녀왔어요",
+  "맛집: 샤브샤브 다녀왔어요",
+  "맛집: 오마카세 다녀왔어요",
+  "제품 리뷰: 에어프라이어 내돈내산 후기",
+  "제품 리뷰: 무선청소기 내돈내산 후기",
+  "제품 리뷰: 단백질 쉐이크 내돈내산 후기",
+  "컨텐츠 리뷰: 넷플릭스 신작 후기",
+  "컨텐츠 리뷰: 넷플릭스 추천 후기",
+  "컨텐츠 리뷰: 디즈니플러스 신작 후기"
  ],
  "failedQueries": 0,
  "pool": 391,
  "items": [
   {
-   "id": "harper16_24",
-   "name": "harper의 생활",
-   "url": "https://blog.naver.com/harper16_24",
-   "cats": [
-    "다이어트 식단",
-    "제품 리뷰"
-   ],
-   "recent_posts": 2,
-   "why": "검색 상위(10위 안) 0회 · 후기 말투 글 2개 · 최근 글 11-13",
-   "latest": [
-    {
-     "title": "식단 닭가슴살 물릴 때 무조건 쟁여두는 내돈내산 저칼로리 소스 찐....",
-     "date": "2026-11-13",
-     "url": "https://blog.naver.com/harper16_24/224475534532"
-    },
-    {
-     "title": "11번 내돈내산 재구매한 닭가슴살 솔직 후기 및 직장인 헬스 식단 루....",
-     "date": "2026-11-09",
-     "url": "https://blog.naver.com/harper16_24/224470214505"
-    }
-   ]
-  },
-  {
-   "id": "qodkwjdals",
-   "name": "BLOG",
-   "url": "https://blog.naver.com/qodkwjdals",
-   "cats": [
-    "맛집"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-18",
-   "latest": [
-    {
-     "title": "망우 소곱창 맛집 야장 추천 곱창모듬 내돈내산ㅣ망우돌곱창",
-     "date": "2026-11-18",
-     "url": "https://blog.naver.com/qodkwjdals/224481509677"
-    }
-   ]
-  },
-  {
-   "id": "y_s9476",
-   "name": "Daily Log",
-   "url": "https://blog.naver.com/y_s9476",
-   "cats": [
-    "맛집"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-16",
-   "latest": [
-    {
-     "title": "동탄 목동 맛집ㅣ포레스트 쌀국수 내돈내산 후기",
-     "date": "2026-11-16",
-     "url": "https://blog.naver.com/y_s9476/224479708012"
-    }
-   ]
-  },
-  {
-   "id": "thes03",
-   "name": "Daily Sol",
-   "url": "https://blog.naver.com/thes03",
-   "cats": [
-    "제품 리뷰"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-08",
-   "latest": [
-    {
-     "title": "닌자 블렌더 BN500KR 내돈내산 후기｜블루베리 스무디 만들기",
-     "date": "2026-11-08",
-     "url": "https://blog.naver.com/thes03/224469617270"
-    }
-   ]
-  },
-  {
-   "id": "dizny5290",
-   "name": "˖° ʟɪꜰᴇ ɪꜱ ᴄᴏᴏʟ(*ૂ❛ᴗ❛*ૂ)",
-   "url": "https://blog.naver.com/dizny5290",
-   "cats": [
-    "카페"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-16",
-   "latest": [
-    {
-     "title": "[의정부]서울근교 핫플 대형카페 크리스마스 테마 카페투어 하러 “....",
-     "date": "2026-11-16",
-     "url": "https://blog.naver.com/dizny5290/224479786053"
-    }
-   ]
-  },
-  {
-   "id": "me66444",
-   "name": "골드맘공간",
-   "url": "https://blog.naver.com/me66444",
-   "cats": [
-    "맛집"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-13",
-   "latest": [
-    {
-     "title": "남편과 다녀온 문정동 소곱창 맛집, 파크하비오 봉열소곱창 모듬한....",
-     "date": "2026-11-13",
-     "url": "https://blog.naver.com/me66444/224475653622"
-    }
-   ]
-  },
-  {
-   "id": "orthofairy",
-   "name": "교정요정의 일상 그리고 치아교정 이야기",
-   "url": "https://blog.naver.com/orthofairy",
-   "cats": [
-    "제품 리뷰"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-18",
-   "latest": [
-    {
-     "title": "믹서기 내돈내산 솔직후기｜닌자 블렌더 믹서기 블라스트 무선 포....",
-     "date": "2026-11-18",
-     "url": "https://blog.naver.com/orthofairy/224481974603"
-    }
-   ]
-  },
-  {
-   "id": "zzzulog",
-   "name": "다올립니다",
-   "url": "https://blog.naver.com/zzzulog",
-   "cats": [
-    "맛집"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-07",
-   "latest": [
-    {
-     "title": "[포항시청맛집] 까오산 쌀국수 | 곱창이 들어간 진한 쌀국수 포항공....",
-     "date": "2026-11-07",
-     "url": "https://blog.naver.com/zzzulog/224468571310"
-    }
-   ]
-  },
-  {
-   "id": "ddooya1004",
-   "name": "뚜야의 일상",
-   "url": "https://blog.naver.com/ddooya1004",
-   "cats": [
-    "카페"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-14",
-   "latest": [
-    {
-     "title": "서울숲 성수 카페 노틀던 케이크와 마들렌 디저트가 예술이에요",
-     "date": "2026-11-14",
-     "url": "https://blog.naver.com/ddooya1004/224476240361"
-    }
-   ]
-  },
-  {
-   "id": "gamzaaran",
-   "name": "라니 | 맛집 • 유행",
-   "url": "https://blog.naver.com/gamzaaran",
-   "cats": [
-    "맛집"
-   ],
-   "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-11",
-   "latest": [
-    {
-     "title": "창원 소답동 쌀국수 맛집 비엣남 | 한정판매 족발밥 카오카무 솔직....",
-     "date": "2026-11-11",
-     "url": "https://blog.naver.com/gamzaaran/224473585727"
-    }
-   ]
-  },
-  {
-   "id": "wogkr777",
-   "name": "면치기하다 코로나옴",
-   "url": "https://blog.naver.com/wogkr777",
+   "id": "odry_lily",
+   "name": "Odry Beauty Channel",
+   "url": "https://blog.naver.com/odry_lily",
    "cats": [
     "다이어트 식단"
    ],
    "recent_posts": 1,
-   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-11",
+   "why": "검색 상위(10위 안) 2회 · 후기 말투 글 1개 · 최근 글 11-18",
    "latest": [
     {
-     "title": "[내돈내산] 식단 관리용 가젠 규슈 생낫또 솔직 후기 (냉동 보관 및 ....",
-     "date": "2026-11-11",
-     "url": "https://blog.naver.com/wogkr777/224472666762"
+     "title": "532 다이어트 정기구독 2회차 내돈내산 배달 도시락 후기",
+     "date": "2026-11-18",
+     "url": "https://blog.naver.com/odry_lily/224481644879"
     }
    ]
   },
   {
-   "id": "leec5000",
-   "name": "새롭게 시작 !",
-   "url": "https://blog.naver.com/leec5000",
+   "id": "myeongakim",
+   "name": "Myo Archive",
+   "url": "https://blog.naver.com/myeongakim",
    "cats": [
-    "다이어트 식단"
+    "맛집"
    ],
    "recent_posts": 1,
    "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-09",
    "latest": [
     {
-     "title": "널담 고단백 저당 고식이섬유 깜빠뉴 내돈내산! 빵 성분·칼로리·효....",
+     "title": "명학역맛집 마라탕 꿔바로우 - 우이맛마라탕",
      "date": "2026-11-09",
-     "url": "https://blog.naver.com/leec5000/224469946266"
+     "url": "https://blog.naver.com/myeongakim/224470590200"
+    }
+   ]
+  },
+  {
+   "id": "godms72",
+   "name": "Sunsilver",
+   "url": "https://blog.naver.com/godms72",
+   "cats": [
+    "카페"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-09",
+   "latest": [
+    {
+     "title": "원주 태장동 카페 카페그린 아이와 함께 다녀온 디저트 맛집",
+     "date": "2026-11-09",
+     "url": "https://blog.naver.com/godms72/224470319598"
+    }
+   ]
+  },
+  {
+   "id": "yesplzz",
+   "name": "bamboo.frst",
+   "url": "https://blog.naver.com/yesplzz",
+   "cats": [
+    "제품 리뷰"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-15",
+   "latest": [
+    {
+     "title": "뉴치트 단백질 쉐이크 내돈내산 추천 후기 • 배라맛 단백질쉐이크?....",
+     "date": "2026-11-15",
+     "url": "https://blog.naver.com/yesplzz/224477232651"
+    }
+   ]
+  },
+  {
+   "id": "enoch_with",
+   "name": "김에녹의 여행노트",
+   "url": "https://blog.naver.com/enoch_with",
+   "cats": [
+    "맛집"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-08",
+   "latest": [
+    {
+     "title": "경주 보문 닭 코스요리집 아리랑 다녀온 후기 | 닭 샤브샤브부터 닭....",
+     "date": "2026-11-08",
+     "url": "https://blog.naver.com/enoch_with/224469252666"
+    }
+   ]
+  },
+  {
+   "id": "o4o9o8",
+   "name": "놀러오세요(*ᴗ͈ˬᴗ͈)ꕤ*.ﾟ",
+   "url": "https://blog.naver.com/o4o9o8",
+   "cats": [
+    "제품 리뷰"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-14",
+   "latest": [
+    {
+     "title": "[라라스윗 단백질쉐이크] 내돈내산 후기 | 딸기크런치 | 올리브영 저....",
+     "date": "2026-11-14",
+     "url": "https://blog.naver.com/o4o9o8/224477338712"
+    }
+   ]
+  },
+  {
+   "id": "boniboni_25",
+   "name": "맛있는 순간과 좋은 공간을 기록해요 ♡",
+   "url": "https://blog.naver.com/boniboni_25",
+   "cats": [
+    "다이어트 식단"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-19",
+   "latest": [
+    {
+     "title": "닭가슴살 이렇게 먹으면 안 질림ㅋㅋ 풀토래 닭가슴살 내돈내산 후....",
+     "date": "2026-11-19",
+     "url": "https://blog.naver.com/boniboni_25/224484065076"
+    }
+   ]
+  },
+  {
+   "id": "yooya02",
+   "name": "모든것이 내맘같길~♥",
+   "url": "https://blog.naver.com/yooya02",
+   "cats": [
+    "맛집"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-19",
+   "latest": [
+    {
+     "title": "정관 마라탕 맛집 춘리마라탕에 다녀왔어요",
+     "date": "2026-11-19",
+     "url": "https://blog.naver.com/yooya02/224483266137"
+    }
+   ]
+  },
+  {
+   "id": "kitefire2",
+   "name": "무얼 먹고 사나?",
+   "url": "https://blog.naver.com/kitefire2",
+   "cats": [
+    "맛집"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 10-23",
+   "latest": [
+    {
+     "title": "서울 선유도 l 기념일에 다녀오기 좋은 지즐 한우오마카세",
+     "date": "2026-10-23",
+     "url": "https://blog.naver.com/kitefire2/224451349134"
+    }
+   ]
+  },
+  {
+   "id": "strawbexrysmoothie",
+   "name": "밥먹고 커피마시고 여행가고",
+   "url": "https://blog.naver.com/strawbexrysmoothie",
+   "cats": [
+    "카페"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-12",
+   "latest": [
+    {
+     "title": "한남동 샌드위치 맛집 카페 댄스댄스댄스 한남점 가을 신메뉴 헤이!....",
+     "date": "2026-11-12",
+     "url": "https://blog.naver.com/strawbexrysmoothie/224473802982"
+    }
+   ]
+  },
+  {
+   "id": "parkseulgi_1012",
+   "name": "복스토리",
+   "url": "https://blog.naver.com/parkseulgi_1012",
+   "cats": [
+    "카페"
+   ],
+   "recent_posts": 2,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-16",
+   "latest": [
+    {
+     "title": "평택 비전동 카페 백억커피 평택비전점 신메뉴 3종 갈릭 크림치즈 ....",
+     "date": "2026-11-16",
+     "url": "https://blog.naver.com/parkseulgi_1012/224478572617"
+    },
+    {
+     "title": "안성 베이커리 카페 폰손비, 인생 몽블랑에 신메뉴 뱅쇼에이드까지!",
+     "date": "2026-11-14",
+     "url": "https://blog.naver.com/parkseulgi_1012/224477240138"
+    }
+   ]
+  },
+  {
+   "id": "vision_realestate",
+   "name": "비젼옥션랩 | 경매·재개발 읽어주는 중개사",
+   "url": "https://blog.naver.com/vision_realestate",
+   "cats": [
+    "맛집"
+   ],
+   "recent_posts": 1,
+   "why": "검색 상위(10위 안) 1회 · 후기 말투 글 1개 · 최근 글 11-12",
+   "latest": [
+    {
+     "title": "루원시티 샤브웨이 샤브뷔페 평일점심 다녀온 내돈내산 후기",
+     "date": "2026-11-12",
+     "url": "https://blog.naver.com/vision_realestate/224474279582"
     }
    ]
   }
